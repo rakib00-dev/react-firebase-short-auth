@@ -1,11 +1,41 @@
 import React, { useState } from 'react';
 import { FcGoogle } from 'react-icons/fc';
+import {
+  doSignInWithEmailAndPassword,
+  doSignInWithGoogle,
+} from '../firebase/auth';
+import { useAuth } from '../contexts/authContexts/AuthProvider';
 
 const LoginPage = () => {
+  // const { userLoggedIn } = useAuth();
+
   const [isWantToLogin, setIsWantToLogin] = useState(true);
   const [isLogedIn, setIsLogedIn] = useState(false);
 
-  // const userD = { name: 'Rakib', role: 'Admin' };
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [isSigningIn, setIsSigningIn] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  console.log({ email, password, isSigningIn });
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!isSigningIn) {
+      setIsSigningIn(true);
+      await doSignInWithEmailAndPassword(email, password);
+    }
+  };
+
+  const onGoogleSignIn = (e) => {
+    e.preventDefault();
+    if (!isSigningIn) {
+      setIsSigningIn(true);
+      doSignInWithGoogle().catch((err) => {
+        setIsSigningIn(false);
+      });
+    }
+  };
 
   return (
     <div className="w-full mx-auto flex flex-col max-w-md p-6 rounded-md sm:p-10 bg-gray-50 border border-gray-200 shadow-xl text-gray-800 my-12">
@@ -32,7 +62,12 @@ const LoginPage = () => {
           </p>
         </div>
       )}
-      <form noValidate="" action="" className="space-y-12">
+      <form
+        noValidate=""
+        action=""
+        className="space-y-12"
+        onSubmit={(e) => handleSubmit(e)}
+      >
         <div className="space-y-4">
           <div>
             {!isWantToLogin && (
@@ -60,11 +95,15 @@ const LoginPage = () => {
             </label>
             <input
               required
+              value={email}
               type="email"
               name="email"
               id="email"
               placeholder="leroy@jenkins.com"
               className="w-full px-3 py-2 border rounded-md border-gray-300  text-gray-800"
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
             />
           </div>
           <div>
@@ -82,11 +121,15 @@ const LoginPage = () => {
             </div>
             <input
               required
+              value={password}
               type="password"
               name="password"
               id="password"
               placeholder="********"
               className="w-full px-3 py-2 border rounded-md border-gray-300  text-gray-800"
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
             />
           </div>
           {!isWantToLogin && (
@@ -100,6 +143,9 @@ const LoginPage = () => {
                 <button
                   aria-label="Log in with Google"
                   className="p-3 rounded-sm flex gap-2 font-medium cursor-pointer w-full h-full justify-center items-center border border-gray-100"
+                  onClick={(e) => {
+                    onGoogleSignIn(e);
+                  }}
                 >
                   <FcGoogle className="text-2xl" /> Continue with Google
                 </button>

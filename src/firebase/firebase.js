@@ -11,10 +11,6 @@ export const firebaseConfig = {
   appId: import.meta.env.VITE_appId,
 };
 
-console.log(firebaseConfig.apiKey);
-console.log(import.meta.env.VITE_SOME_KEY); // "123"
-console.log(import.meta.env.DB_PASSWORD); // undefined
-
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
