@@ -3,9 +3,9 @@ import { firebaseConfig } from './firebase/firebase';
 
 function App() {
   return (
-    <>
+    <div className="grid place-items-center ">
       <LoginPage />
-    </>
+    </div>
   );
 }
 
