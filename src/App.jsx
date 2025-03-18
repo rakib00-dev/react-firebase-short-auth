@@ -1,9 +1,12 @@
+import LoginPage from './components/LoginPage';
 import { firebaseConfig } from './firebase/firebase';
 
 function App() {
-  console.log(firebaseConfig.storageBucket);
-
-  return <></>;
+  return (
+    <>
+      <LoginPage />
+    </>
+  );
 }
 
 export default App;
